@@ -6,7 +6,7 @@ import (
 
 	"fmt"
 
-	"logr.Logger"
+	//"logr.Logger"
 
 	"github.com/nlopes/slack"
 	routev1 "github.com/openshift/api/route/v1"
