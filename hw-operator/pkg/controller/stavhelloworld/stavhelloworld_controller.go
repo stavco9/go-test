@@ -5,8 +5,8 @@ import (
 	"os"
 
 	"fmt"
-	"log"
 
+	"github.com/go-logr/logr"
 	"github.com/nlopes/slack"
 	routev1 "github.com/openshift/api/route/v1"
 	stavv1alpha1 "github.com/stavco9/go-test/pkg/apis/stav/v1alpha1"
