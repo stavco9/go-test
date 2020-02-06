@@ -44,13 +44,13 @@ func newReconciler(mgr manager.Manager) reconcile.Reconciler {
 // add adds a new Controller to mgr with r as the reconcile.Reconciler
 func add(mgr manager.Manager, r reconcile.Reconciler) error {
 	// Create a new controller
-	c, err := controller.New("<YOUR-NAME>helloworld-controller", mgr, controller.Options{Reconciler: r})
+	c, err := controller.New("stavhelloworld-controller", mgr, controller.Options{Reconciler: r})
 	if err != nil {
 	  return err
 	}
 
 	// Watch for changes to primary resource <YOUR-NAME>HelloWorld
-	err = c.Watch(&source.Kind{Type: &<YOUR-NAME>v1alpha1.<YOUR-NAME>HelloWorld{}}, &handler.EnqueueRequestForObject{})
+	err = c.Watch(&source.Kind{Type: &stavhelloworldv1alpha1.StavHelloWorld{}}, &handler.EnqueueRequestForObject{})
 	if err != nil {
 	  return err
 	}
@@ -86,7 +86,7 @@ func add(mgr manager.Manager, r reconcile.Reconciler) error {
 }
 
 // Reconcile loop resources managers functions
-func (r *Reconcile<YOUR-NAME>HelloWorld) manageDeployment(hw *<YOUR-NAME>v1alpha1.<YOUR-NAME>HelloWorld, reqLogger logr.Logger) (*reconcile.Result, error) {
+func (r *ReconcileStavHelloWorld) manageDeployment(hw *stavhelloworldv1alpha1.StavHelloWorld, reqLogger logr.Logger) (*reconcile.Result, error) {
   deployment := &appsv1.Deployment{}
   err := r.client.Get(context.TODO(), types.NamespacedName{Name: hw.Name, Namespace: hw.Namespace}, deployment)
   if err != nil && errors.IsNotFound(err) {
@@ -109,7 +109,7 @@ func (r *Reconcile<YOUR-NAME>HelloWorld) manageDeployment(hw *<YOUR-NAME>v1alpha
   return nil, nil
 }
 
-func (r *Reconcile<YOUR-NAME>HelloWorld) manageRoute(hw *<YOUR-NAME>v1alpha1.<YOUR-NAME>HelloWorld, reqLogger logr.Logger) (*reconcile.Result, error) {
+func (r *ReconcileStavHelloWorld) manageRoute(hw *stavhelloworldv1alpha1.StavHelloWorld, reqLogger logr.Logger) (*reconcile.Result, error) {
   //Check if route already exists, if not create a new one
   route := &routev1.Route{}
   err := r.client.Get(context.TODO(), types.NamespacedName{Name: hw.Name, Namespace: hw.Namespace}, route)
@@ -133,7 +133,7 @@ func (r *Reconcile<YOUR-NAME>HelloWorld) manageRoute(hw *<YOUR-NAME>v1alpha1.<YO
   return nil, nil
 }
 
-func (r *Reconcile<YOUR-NAME>HelloWorld) manageService(hw *<YOUR-NAME>v1alpha1.<YOUR-NAME>HelloWorld, reqLogger logr.Logger) (*reconcile.Result, error) {
+func (r *ReconcileStavHelloWorld) manageService(hw *stavhelloworldv1alpha1.StavHelloWorld, reqLogger logr.Logger) (*reconcile.Result, error) {
   service := &corev1.Service{}
   err := r.client.Get(context.TODO(), types.NamespacedName{Name: hw.Name, Namespace: hw.Namespace}, service)
   if err != nil && errors.IsNotFound(err) {
