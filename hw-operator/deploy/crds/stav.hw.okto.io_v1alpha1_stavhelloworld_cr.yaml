@@ -1,0 +1,7 @@
+apiVersion: stav.hw.okto.io/v1alpha1
+kind: StavHelloWorld
+metadata:
+  name: example-stavhelloworld
+spec:
+  # Add fields here
+  size: 3
