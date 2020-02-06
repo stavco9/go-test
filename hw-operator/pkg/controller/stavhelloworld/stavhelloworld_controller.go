@@ -50,7 +50,7 @@ func add(mgr manager.Manager, r reconcile.Reconciler) error {
 	}
 
 	// Watch for changes to primary resource <YOUR-NAME>HelloWorld
-	err = c.Watch(&source.Kind{Type: &stavhelloworldv1alpha1.StavHelloWorld{}}, &handler.EnqueueRequestForObject{})
+	err = c.Watch(&source.Kind{Type: &stavv1alpha1.StavHelloWorld{}}, &handler.EnqueueRequestForObject{})
 	if err != nil {
 	  return err
 	}
@@ -67,7 +67,7 @@ func add(mgr manager.Manager, r reconcile.Reconciler) error {
 	// Watch for changes to ConfigMap
 	err = c.Watch(&source.Kind{Type: &corev1.ConfigMap{}}, &handler.EnqueueRequestForOwner{
 	  IsController: true,
-	  OwnerType:    &stavhelloworldv1alpha1.StavHelloWorld{},
+	  OwnerType:    &stavv1alpha1.StavHelloWorld{},
 	})
 	if err != nil {
 	  return err
@@ -76,7 +76,7 @@ func add(mgr manager.Manager, r reconcile.Reconciler) error {
 	// Watch for changes to Route
 	err = c.Watch(&source.Kind{Type: &routev1.Route{}}, &handler.EnqueueRequestForOwner{
 	  IsController: true,
-	  OwnerType:    &stavhelloworldv1alpha1.StavHelloWorld{},
+	  OwnerType:    &stavv1alpha1.StavHelloWorld{},
 	})
 	if err != nil {
 	  return err
@@ -86,7 +86,7 @@ func add(mgr manager.Manager, r reconcile.Reconciler) error {
 }
 
 // Reconcile loop resources managers functions
-func (r *ReconcileStavHelloWorld) manageDeployment(hw *stavhelloworldv1alpha1.StavHelloWorld, reqLogger logr.Logger) (*reconcile.Result, error) {
+func (r *ReconcileStavHelloWorld) manageDeployment(hw *stavv1alpha1.StavHelloWorld, reqLogger logr.Logger) (*reconcile.Result, error) {
   deployment := &appsv1.Deployment{}
   err := r.client.Get(context.TODO(), types.NamespacedName{Name: hw.Name, Namespace: hw.Namespace}, deployment)
   if err != nil && errors.IsNotFound(err) {
@@ -109,7 +109,7 @@ func (r *ReconcileStavHelloWorld) manageDeployment(hw *stavhelloworldv1alpha1.St
   return nil, nil
 }
 
-func (r *ReconcileStavHelloWorld) manageRoute(hw *stavhelloworldv1alpha1.StavHelloWorld, reqLogger logr.Logger) (*reconcile.Result, error) {
+func (r *ReconcileStavHelloWorld) manageRoute(hw *stavv1alpha1.StavHelloWorld, reqLogger logr.Logger) (*reconcile.Result, error) {
   //Check if route already exists, if not create a new one
   route := &routev1.Route{}
   err := r.client.Get(context.TODO(), types.NamespacedName{Name: hw.Name, Namespace: hw.Namespace}, route)
@@ -133,7 +133,7 @@ func (r *ReconcileStavHelloWorld) manageRoute(hw *stavhelloworldv1alpha1.StavHel
   return nil, nil
 }
 
-func (r *ReconcileStavHelloWorld) manageService(hw *stavhelloworldv1alpha1.StavHelloWorld, reqLogger logr.Logger) (*reconcile.Result, error) {
+func (r *ReconcileStavHelloWorld) manageService(hw *stavv1alpha1.StavHelloWorld, reqLogger logr.Logger) (*reconcile.Result, error) {
   service := &corev1.Service{}
   err := r.client.Get(context.TODO(), types.NamespacedName{Name: hw.Name, Namespace: hw.Namespace}, service)
   if err != nil && errors.IsNotFound(err) {
@@ -167,7 +167,7 @@ func (r *ReconcileStavHelloWorld) manageService(hw *stavhelloworldv1alpha1.StavH
   return nil, nil
 }
 
-func (r *ReconcileStavHelloWorld) manageConfigMap(hw *stavhelloworldv1alpha1.StavHelloWorld, reqLogger logr.Logger) (*reconcile.Result, error) {
+func (r *ReconcileStavHelloWorld) manageConfigMap(hw *stavv1alpha1.StavHelloWorld, reqLogger logr.Logger) (*reconcile.Result, error) {
   cm := &corev1.ConfigMap{}
   err := r.client.Get(context.TODO(), types.NamespacedName{Name: hw.Name, Namespace: hw.Namespace}, cm)
   if err != nil && errors.IsNotFound(err) {
@@ -206,7 +206,7 @@ func (r *ReconcileStavHelloWorld) manageConfigMap(hw *stavhelloworldv1alpha1.Sta
 }
 
 // Resources creation functions
-func (r *ReconcileStavHelloWorld) deploymentForWebServer(hw *stavhelloworldv1alpha1.StavHelloWorld) (*appsv1.Deployment, error) {
+func (r *ReconcileStavHelloWorld) deploymentForWebServer(hw *stavv1alpha1.StavHelloWorld) (*appsv1.Deployment, error) {
     var replicas int32
     replicas = 1
     labels := map[string]string{
@@ -270,7 +270,7 @@ func (r *ReconcileStavHelloWorld) deploymentForWebServer(hw *stavhelloworldv1alp
     return dep, nil
   }
 
-func (r *ReconcileStavHelloWorld) serviceForWebServer(hw *stavhelloworldv1alpha1.StavHelloWorld, service *corev1.Service) error {
+func (r *ReconcileStavHelloWorld) serviceForWebServer(hw *stavv1alpha1.StavHelloWorld, service *corev1.Service) error {
   labels := map[string]string{
     "app": hw.Name,
   }
@@ -292,7 +292,7 @@ func (r *ReconcileStavHelloWorld) serviceForWebServer(hw *stavhelloworldv1alpha1
   return nil
 }
 
-func (r *ReconcileStavHelloWorld) routeForWebServer(hw *stavhelloworldv1alpha1.StavHelloWorld) (*routev1.Route, error) {
+func (r *ReconcileStavHelloWorld) routeForWebServer(hw *stavv1alpha1.StavHelloWorld) (*routev1.Route, error) {
   labels := map[string]string{
     "app": hw.Name,
   }
@@ -319,7 +319,7 @@ func (r *ReconcileStavHelloWorld) routeForWebServer(hw *stavhelloworldv1alpha1.S
   return route, nil
 }
 
-func (r *ReconcileStavHelloWorld) configMapForWebServer(hw *stavhelloworldv1alpha1.StavHelloWorld) (*corev1.ConfigMap, error) {
+func (r *ReconcileStavHelloWorld) configMapForWebServer(hw *stavv1alpha1.StavHelloWorld) (*corev1.ConfigMap, error) {
   labels := map[string]string{
     "app": hw.Name,
   }
@@ -339,7 +339,7 @@ func (r *ReconcileStavHelloWorld) configMapForWebServer(hw *stavhelloworldv1alph
   return cm, nil
 }
 
-func (r *ReconcileStavHelloWorld) syncConfigMapForWebServer(hw *stavhelloworldv1alpha1.StavHelloWorld, cm *corev1.ConfigMap) (syncRequired bool, err error) {
+func (r *ReconcileStavHelloWorld) syncConfigMapForWebServer(hw *stavv1alpha1.StavHelloWorld, cm *corev1.ConfigMap) (syncRequired bool, err error) {
   if hw.Spec.Message != cm.Data["index.html"] {
     log.Info("Message in CR spec not the same as in CM, gonna update website cm")
     cm.Data["index.html"] = hw.Spec.Message
@@ -372,7 +372,7 @@ func (r *ReconcileStavHelloWorld) Reconcile(request reconcile.Request) (reconcil
 	reqLogger.Info("Reconciling HelloWorld")
 
 	// Fetch the HelloWorld instance
-	hw := &stavhelloworldv1alpha1.StavHelloWorld{}
+	hw := &stavv1alpha1.StavHelloWorld{}
 	err := r.client.Get(context.TODO(), request.NamespacedName, hw)
 	if err != nil {
 		if errors.IsNotFound(err) {
@@ -449,7 +449,7 @@ func (r *ReconcileStavHelloWorld) Reconcile(request reconcile.Request) (reconcil
 	return reconcile.Result{}, nil
 }
 
-func (r *ReconcileStavHelloWorld) initFinalization(hw *stavhelloworldv1alpha1.StavHelloWorld, reqLogger logr.Logger) error {
+func (r *ReconcileStavHelloWorld) initFinalization(hw *stavv1alpha1.StavHelloWorld, reqLogger logr.Logger) error {
   isHwMarkedToBeDeleted := hw.GetDeletionTimestamp() != nil
   if isHwMarkedToBeDeleted {
     if contains(hw.GetFinalizers(), hwFinalizer) {
@@ -482,7 +482,7 @@ func (r *ReconcileStavHelloWorld) initFinalization(hw *stavhelloworldv1alpha1.St
   return nil
 }
 
-func (r *ReconcileStavHelloWorld) finalizeHw(hw *stavhelloworldv1alpha1.StavHelloWorld, reqLogger logr.Logger, ) error {
+func (r *ReconcileStavHelloWorld) finalizeHw(hw *stavv1alpha1.StavHelloWorld, reqLogger logr.Logger, ) error {
   slackToken, err := getSlackToken()
   if err != nil {
     reqLogger.Error(err, "Gonna skip finzalize, the error during getting slack token")
@@ -504,7 +504,7 @@ func (r *ReconcileStavHelloWorld) finalizeHw(hw *stavhelloworldv1alpha1.StavHell
   return nil
 }
 
-func (r *ReconcileStavHelloWorld) addFinalizer(hw *stavhelloworldv1alpha1.StavHelloWorld, reqLogger logr.Logger) error {
+func (r *ReconcileStavHelloWorld) addFinalizer(hw *stavv1alpha1.StavHelloWorld, reqLogger logr.Logger) error {
   reqLogger.Info("Adding Finalizer for the Memcached")
   hw.SetFinalizers(append(hw.GetFinalizers(), hwFinalizer))
   // Update CR
