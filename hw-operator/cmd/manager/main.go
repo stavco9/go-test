@@ -9,13 +9,14 @@ import (
 	"runtime"
 
 	// Import all Kubernetes client auth plugins (e.g. Azure, GCP, OIDC, etc.)
-	"k8s.io/client-go/plugin/pkg/client/auth"
+	//"k8s.io/client-go/plugin/pkg/client/auth"
 	"k8s.io/client-go/rest"
 
 	"github.com/stavco9/go-test/pkg/apis"
 	"github.com/stavco9/go-test/pkg/controller"
 	"github.com/stavco9/go-test/version"
 
+	routev1 "github.com/openshift/api/route/v1"
 	"github.com/operator-framework/operator-sdk/pkg/k8sutil"
 	kubemetrics "github.com/operator-framework/operator-sdk/pkg/kube-metrics"
 	"github.com/operator-framework/operator-sdk/pkg/leader"
@@ -29,7 +30,6 @@ import (
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 	"sigs.k8s.io/controller-runtime/pkg/manager/signals"
-	routev1 "github.com/openshift/api/route/v1"
 )
 
 // Change below variables to serve metrics on different host or port.
@@ -125,6 +125,12 @@ func main() {
 		log.Error(err, "Manager exited non-zero")
 		os.Exit(1)
 	}
+
+	// Adding the routev1
+	if err := routev1.Install(mgr.GetScheme()); err != nil {
+		log.Error(err, "")
+		os.Exit(1)
+	}
 }
 
 // addMetrics will create the Services and Service Monitors to allow the operator export the metrics by using
@@ -161,12 +167,6 @@ func addMetrics(ctx context.Context, cfg *rest.Config, namespace string) {
 		if err == metrics.ErrServiceMonitorNotPresent {
 			log.Info("Install prometheus-operator in your cluster to create ServiceMonitor objects", "error", err.Error())
 		}
-	}
-
-	// Adding the routev1
-	if err := routev1.Install(mgr.GetScheme()); err != nil {
-		log.Error(err, "")
-		os.Exit(1)
 	}
 }
 
