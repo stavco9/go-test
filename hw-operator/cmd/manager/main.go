@@ -29,6 +29,7 @@ import (
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 	"sigs.k8s.io/controller-runtime/pkg/manager/signals"
+	routev1 "github.com/openshift/api/route/v1"
 )
 
 // Change below variables to serve metrics on different host or port.
@@ -160,6 +161,12 @@ func addMetrics(ctx context.Context, cfg *rest.Config, namespace string) {
 		if err == metrics.ErrServiceMonitorNotPresent {
 			log.Info("Install prometheus-operator in your cluster to create ServiceMonitor objects", "error", err.Error())
 		}
+	}
+
+	// Adding the routev1
+	if err := routev1.Install(mgr.GetScheme()); err != nil {
+		log.Error(err, "")
+		os.Exit(1)
 	}
 }
 
