@@ -58,7 +58,7 @@ func add(mgr manager.Manager, r reconcile.Reconciler) error {
 	// Watch for changes to Service
 	err = c.Watch(&source.Kind{Type: &corev1.Service{}}, &handler.EnqueueRequestForOwner{
 	  IsController: true,
-	  OwnerType:    &<YOUR-NAME>v1alpha1.<YOUR-NAME>HelloWorld{},
+	  OwnerType:    &stavhellowolrdv1alpha1.StavHelloWorld{},
 	})
 	if err != nil {
 	  return err
@@ -67,7 +67,7 @@ func add(mgr manager.Manager, r reconcile.Reconciler) error {
 	// Watch for changes to ConfigMap
 	err = c.Watch(&source.Kind{Type: &corev1.ConfigMap{}}, &handler.EnqueueRequestForOwner{
 	  IsController: true,
-	  OwnerType:    &<YOUR-NAME>v1alpha1.<YOUR-NAME>HelloWorld{},
+	  OwnerType:    &stavhelloworldv1alpha1.StavHelloWorld{},
 	})
 	if err != nil {
 	  return err
@@ -76,7 +76,7 @@ func add(mgr manager.Manager, r reconcile.Reconciler) error {
 	// Watch for changes to Route
 	err = c.Watch(&source.Kind{Type: &routev1.Route{}}, &handler.EnqueueRequestForOwner{
 	  IsController: true,
-	  OwnerType:    &<YOUR-NAME>v1alpha1.<YOUR-NAME>HelloWorld{},
+	  OwnerType:    &stavhelloworldv1alpha1.StavHelloWorld{},
 	})
 	if err != nil {
 	  return err
@@ -167,7 +167,7 @@ func (r *ReconcileStavHelloWorld) manageService(hw *stavhelloworldv1alpha1.StavH
   return nil, nil
 }
 
-func (r *Reconcile<YOUR-NAME>HelloWorld) manageConfigMap(hw *<YOUR-NAME>v1alpha1.<YOUR-NAME>HelloWorld, reqLogger logr.Logger) (*reconcile.Result, error) {
+func (r *ReconcileStavHelloWorld) manageConfigMap(hw *stavhelloworldv1alpha1.StavHelloWorld, reqLogger logr.Logger) (*reconcile.Result, error) {
   cm := &corev1.ConfigMap{}
   err := r.client.Get(context.TODO(), types.NamespacedName{Name: hw.Name, Namespace: hw.Namespace}, cm)
   if err != nil && errors.IsNotFound(err) {
@@ -206,7 +206,7 @@ func (r *Reconcile<YOUR-NAME>HelloWorld) manageConfigMap(hw *<YOUR-NAME>v1alpha1
 }
 
 // Resources creation functions
-func (r *Reconcile<YOUR-NAME>HelloWorld) deploymentForWebServer(hw *<YOUR-NAME>v1alpha1.<YOUR-NAME>HelloWorld) (*appsv1.Deployment, error) {
+func (r *ReconcileStavHelloWorld) deploymentForWebServer(hw *stavhelloworldv1alpha1.StavHelloWorld) (*appsv1.Deployment, error) {
     var replicas int32
     replicas = 1
     labels := map[string]string{
@@ -270,7 +270,7 @@ func (r *Reconcile<YOUR-NAME>HelloWorld) deploymentForWebServer(hw *<YOUR-NAME>v
     return dep, nil
   }
 
-func (r *Reconcile<YOUR-NAME>HelloWorld) serviceForWebServer(hw *<YOUR-NAME>v1alpha1.<YOUR-NAME>HelloWorld, service *corev1.Service) error {
+func (r *ReconcileStavHelloWorld) serviceForWebServer(hw *stavhelloworldv1alpha1.StavHelloWorld, service *corev1.Service) error {
   labels := map[string]string{
     "app": hw.Name,
   }
@@ -292,7 +292,7 @@ func (r *Reconcile<YOUR-NAME>HelloWorld) serviceForWebServer(hw *<YOUR-NAME>v1al
   return nil
 }
 
-func (r *Reconcile<YOUR-NAME>HelloWorld) routeForWebServer(hw *<YOUR-NAME>v1alpha1.<YOUR-NAME>HelloWorld) (*routev1.Route, error) {
+func (r *ReconcileStavHelloWorld) routeForWebServer(hw *stavhelloworldv1alpha1.StavHelloWorld) (*routev1.Route, error) {
   labels := map[string]string{
     "app": hw.Name,
   }
@@ -319,7 +319,7 @@ func (r *Reconcile<YOUR-NAME>HelloWorld) routeForWebServer(hw *<YOUR-NAME>v1alph
   return route, nil
 }
 
-func (r *Reconcile<YOUR-NAME>HelloWorld) configMapForWebServer(hw *<YOUR-NAME>v1alpha1.<YOUR-NAME>HelloWorld) (*corev1.ConfigMap, error) {
+func (r *ReconcileStavHelloWorld) configMapForWebServer(hw *stavhelloworldv1alpha1.StavHelloWorld) (*corev1.ConfigMap, error) {
   labels := map[string]string{
     "app": hw.Name,
   }
@@ -339,7 +339,7 @@ func (r *Reconcile<YOUR-NAME>HelloWorld) configMapForWebServer(hw *<YOUR-NAME>v1
   return cm, nil
 }
 
-func (r *Reconcile<YOUR-NAME>HelloWorld) syncConfigMapForWebServer(hw *<YOUR-NAME>v1alpha1.<YOUR-NAME>HelloWorld, cm *corev1.ConfigMap) (syncRequired bool, err error) {
+func (r *ReconcileStavHelloWorld) syncConfigMapForWebServer(hw *stavhelloworldv1alpha1.StavHelloWorld, cm *corev1.ConfigMap) (syncRequired bool, err error) {
   if hw.Spec.Message != cm.Data["index.html"] {
     log.Info("Message in CR spec not the same as in CM, gonna update website cm")
     cm.Data["index.html"] = hw.Spec.Message
@@ -372,7 +372,7 @@ func (r *ReconcileStavHelloWorld) Reconcile(request reconcile.Request) (reconcil
 	reqLogger.Info("Reconciling HelloWorld")
 
 	// Fetch the HelloWorld instance
-	hw := &<YOUR-NAME>v1alpha1.<YOUR-NAME>HelloWorld{}
+	hw := &stavhelloworldv1alpha1.StavHelloWorld{}
 	err := r.client.Get(context.TODO(), request.NamespacedName, hw)
 	if err != nil {
 		if errors.IsNotFound(err) {
