@@ -3,6 +3,7 @@ module github.com/stavco9/go-test
 go 1.13
 
 require (
+	github.com/go-logr/logr v0.1.0
 	github.com/nlopes/slack v0.6.0
 	github.com/openshift/api v3.9.1-0.20190924102528-32369d4db2ad+incompatible
 	github.com/operator-framework/operator-sdk v0.15.1

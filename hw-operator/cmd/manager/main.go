@@ -109,6 +109,12 @@ func main() {
 		os.Exit(1)
 	}
 
+	// Adding the routev1
+	if err := routev1.Install(mgr.GetScheme()); err != nil {
+		log.Error(err, "")
+		os.Exit(1)
+	}
+
 	// Setup all Controllers
 	if err := controller.AddToManager(mgr); err != nil {
 		log.Error(err, "")
@@ -123,12 +129,6 @@ func main() {
 	// Start the Cmd
 	if err := mgr.Start(signals.SetupSignalHandler()); err != nil {
 		log.Error(err, "Manager exited non-zero")
-		os.Exit(1)
-	}
-
-	// Adding the routev1
-	if err := routev1.Install(mgr.GetScheme()); err != nil {
-		log.Error(err, "")
 		os.Exit(1)
 	}
 }
